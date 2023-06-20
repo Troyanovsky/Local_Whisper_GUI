@@ -2,11 +2,15 @@
 import tkinter as tk
 from tkinter import filedialog
 from faster_whisper import WhisperModel
+import os
 
 class App:
     def __init__(self, master):
         self.master = master
         master.title("Whisper Transcriber")
+        
+        # Set initial window size
+        master.geometry("1280x720")
 
         # Initialize Whisper
         model_size = "small"
@@ -14,35 +18,50 @@ class App:
 
         # Choose File button
         self.choose_file_button = tk.Button(master, text="Choose File", command=self.choose_file)
-        self.choose_file_button.pack()
+        self.choose_file_button.grid(row=0, column=0, padx=10, pady=10)
 
         # Label to display chosen file name
         self.chosen_file_label = tk.Label(master, text="")
-        self.chosen_file_label.pack()
+        self.chosen_file_label.grid(row=0, column=1, padx=10, pady=10)
+
+        # Start button
+        self.start_button = tk.Button(master, text="Start", command=self.start_transcription)
+        self.start_button.grid(row=1, column=0, padx=10, pady=10)
 
         # Tickbox for including timestamps
         self.include_timestamps_var = tk.BooleanVar()
         self.include_timestamps_tickbox = tk.Checkbutton(master, text="With Timestamp", variable=self.include_timestamps_var)
-        self.include_timestamps_tickbox.pack()
+        self.include_timestamps_tickbox.grid(row=1, column=1, padx=10, pady=10)
 
-        # Start button
-        self.start_button = tk.Button(master, text="Start", command=self.start_transcription)
-        self.start_button.pack()
+        # Detected language label
+        self.detected_language_label = tk.Label(master, text="Detected language: None")
+        self.detected_language_label.grid(row=2, column=0, padx=10, pady=10)
+
+        # Word count label
+        self.word_count_label = tk.Label(master, text="Transcription word count: None")
+        self.word_count_label.grid(row=2, column=1, padx=10, pady=10)
 
         # Result text area
         self.result_text_area = tk.Text(master)
-        self.result_text_area.pack(fill=tk.BOTH, expand=True)
+        self.result_text_area.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+
+        # Configure row and column resizing
+        master.grid_rowconfigure(3, weight=1)
+        master.grid_columnconfigure(0, weight=1)
+        master.grid_columnconfigure(1, weight=1)
 
     def choose_file(self):
         # Open file dialog and get chosen file path
         self.file_path = filedialog.askopenfilename()
+        # Get the file name from the file path
+        file_name = os.path.basename(self.file_path)
         # Update chosen file label with file name
-        self.chosen_file_label.config(text="Chosen file: " + self.file_path)
+        self.chosen_file_label.config(text="Chosen file: " + file_name)
 
     def start_transcription(self):
         # Clear previous results from text area
         self.result_text_area.delete(1.0, tk.END)
-
+        info = ""
         try:
             # Perform transcription
             segments, info = self.model.transcribe(self.file_path, beam_size=5, vad_filter=True)
@@ -66,7 +85,9 @@ class App:
         # Count the number of words in the transcription
         word_count = len(self.result_text_area.get("1.0", "end-1c").split())
         # Display word count at the top of the transcription
-        self.result_text_area.insert("1.0", f"TRANSCRIPTION WORD COUNT: {word_count}\n")
+        self.word_count_label.config(text=f"Transcription word count: {word_count}\n")
+        if info:
+            self.detected_language_label.config(text="Detected language '%s' with probability %f" % (info.language, info.language_probability))
 
 root = tk.Tk()
 app = App(root)
