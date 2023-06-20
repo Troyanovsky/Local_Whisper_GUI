@@ -15,10 +15,17 @@ def parse_args():
         choices=["tiny","base","small","meidum","large-v1","large-v2"],
         help="Choose the Whisper model size (tiny, base, small, medium, large-v1, large-v2). Add '.en' after model size for English-only models. Default is small.",
     )
+    parser.add_argument(
+        "-d",
+        "--device",
+        default="auto",
+        choices=["auto", "cpu", "cuda"],
+        help="Choose the device to run the transcription on (auto or cpu or cuda). Default is auto.",
+    )
     return parser.parse_args()
 
 class App:
-    def __init__(self, master, model_size):
+    def __init__(self, master, model_size, device):
         self.master = master
         master.title("Whisper Transcriber")
         
@@ -26,7 +33,7 @@ class App:
         master.geometry("1280x720")
 
         # Initialize Whisper
-        self.model = WhisperModel(model_size, device="auto", compute_type="int8")
+        self.model = WhisperModel(model_size, device=device, compute_type="int8")
 
         # Choose File button
         self.choose_file_button = tk.Button(master, text="Choose File", command=self.choose_file)
@@ -105,5 +112,5 @@ class App:
 if __name__ == "__main__":
     args = parse_args()
     root = tk.Tk()
-    app = App(root, args.model_size)
+    app = App(root, args.model_size, args.device)
     root.mainloop()
