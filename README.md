@@ -13,8 +13,8 @@ To run the application, execute the following command:
 python3 app.py
 ```
 
-This will launch the Whisper Transcriber GUI.
-NOTE: it may take a while to download the model during the first time usage. Model used: Whisper Small.
+This will launch the Whisper Transcriber GUI.  
+NOTE: it may take a while to download the model during the first time usage. Model used: Whisper Small.  
 
 1. Click the Choose File button to select an audio file from your local storage.  
 2. Optionally, check the With Timestamp box if you want the transcription to include timestamps.  
