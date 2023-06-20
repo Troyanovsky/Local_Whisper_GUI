@@ -10,7 +10,7 @@ class App:
 
         # Initialize Whisper
         model_size = "small"
-        self.model = WhisperModel(model_size, device="cpu", compute_type="int8")
+        self.model = WhisperModel(model_size, device="auto", compute_type="int8")
 
         # Choose File button
         self.choose_file_button = tk.Button(master, text="Choose File", command=self.choose_file)
