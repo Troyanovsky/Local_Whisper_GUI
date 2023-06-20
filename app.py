@@ -63,6 +63,11 @@ class App:
         except Exception as e:
             self.result_text_area.insert(tk.END, "Error: " + str(e))
 
+        # Count the number of words in the transcription
+        word_count = len(self.result_text_area.get("1.0", "end-1c").split())
+        # Display word count at the top of the transcription
+        self.result_text_area.insert("1.0", f"TRANSCRIPTION WORD COUNT: {word_count}\n")
+
 root = tk.Tk()
 app = App(root)
 root.mainloop()
