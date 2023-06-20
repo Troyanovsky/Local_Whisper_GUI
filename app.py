@@ -1,11 +1,24 @@
 # pip3 install faster-whisper
+import argparse
 import tkinter as tk
 from tkinter import filedialog
 from faster_whisper import WhisperModel
 import os
 
+# Add this function to parse command-line arguments
+def parse_args():
+    parser = argparse.ArgumentParser(description="Whisper Transcriber")
+    parser.add_argument(
+        "-m",
+        "--model-size",
+        default="small",
+        choices=["tiny","base","small","meidum","large-v1","large-v2"],
+        help="Choose the Whisper model size (tiny, base, small, medium, large-v1, large-v2). Add '.en' after model size for English-only models. Default is small.",
+    )
+    return parser.parse_args()
+
 class App:
-    def __init__(self, master):
+    def __init__(self, master, model_size):
         self.master = master
         master.title("Whisper Transcriber")
         
@@ -13,7 +26,6 @@ class App:
         master.geometry("1280x720")
 
         # Initialize Whisper
-        model_size = "small"
         self.model = WhisperModel(model_size, device="auto", compute_type="int8")
 
         # Choose File button
@@ -89,6 +101,9 @@ class App:
         if info:
             self.detected_language_label.config(text="Detected language '%s' with probability %f" % (info.language, info.language_probability))
 
-root = tk.Tk()
-app = App(root)
-root.mainloop()
+# Modify the following lines to pass the model_size to the App class
+if __name__ == "__main__":
+    args = parse_args()
+    root = tk.Tk()
+    app = App(root, args.model_size)
+    root.mainloop()
