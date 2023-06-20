@@ -12,6 +12,7 @@ To run the application, execute the following command:
 ```bash
 python3 app.py
 ```
+Options: use "-m" or "--model" to specify the model to use, including tiny, base, small, medium, large-v1, large-v2. Add '.en' to the end of the model name to use the English-only version.  
 
 This will launch the Whisper Transcriber GUI.  
 NOTE: it may take a while to download the model during the first time usage. Model used: Whisper Small.  
