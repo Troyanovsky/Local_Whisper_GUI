@@ -72,10 +72,17 @@ class App:
     def choose_file(self):
         # Open file dialog and get chosen file path
         self.file_path = filedialog.askopenfilename()
+        
+        # Validate file format: only allow WAV and MP3 files
+        if not self.file_path.lower().endswith((".wav", ".mp3")):
+            tk.messagebox.showerror("Error", "Invalid file format. Please choose a WAV or MP3 file.")
+            return
+        
         # Get the file name from the file path
         file_name = os.path.basename(self.file_path)
         # Update chosen file label with file name
         self.chosen_file_label.config(text="Chosen file: " + file_name)
+
 
     def start_transcription(self):
         # Clear previous results from text area
