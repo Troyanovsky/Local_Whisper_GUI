@@ -1,6 +1,7 @@
 # pip3 install faster-whisper
 import argparse
 import tkinter as tk
+from tkinter import messagebox
 from tkinter import filedialog
 from faster_whisper import WhisperModel
 import os
@@ -74,8 +75,8 @@ class App:
         self.file_path = filedialog.askopenfilename()
         
         # Validate file format: only allow WAV and MP3 files
-        if not self.file_path.lower().endswith((".wav", ".mp3")):
-            tk.messagebox.showerror("Error", "Invalid file format. Please choose a WAV or MP3 file.")
+        if not self.file_path.lower().endswith((".m4a", ".mp3", ".webm", ".mp4", ".mpga", ".wav", ".mpeg")):
+            messagebox.showerror("Error", "Invalid file format. Please choose an audio file.")
             return
         
         # Get the file name from the file path
